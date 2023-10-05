@@ -17,6 +17,7 @@
 
 import pandas as pd
 import matplotlib.pyplot as plt
+#import matplotlib.colors as mcolors
 from pathlib import Path
 
 def getInfoList(occupationsList):
@@ -119,18 +120,43 @@ def makeGraphs(descriptions):
     plt.savefig(fileName)
     plt.show()
 
-def makeOtherGraph(descriptions):
+def makeOtherGraph(descriptions, name):
     values = []
     keys = []
     for element in descriptions:
-        values.append(element['sleepDurationMean'])
+        values.append(element[name])
         keys.append(element['Occupation'])
     length = len(descriptions)
     #plt.bar(range(length), values, tick_label=keys)
     plt.bar(keys, values)
     addLabels(values)
+
+    plt.title(name)
+
     # Save graphs to png files
-    fileName = "Charts/ch2.png"
+    fileName = "Charts/" + name +".png"
+    plt.savefig(fileName)
+    plt.show()
+
+
+def differentGraph(descriptionsList):
+    values = []
+    keys = []
+    names = ["sleepDurationMean", 'qualityOfSleepMean', 'stressLevelMean']
+    colors = ['green', 'blue', 'red']
+    for i in range(3):
+        for element in descriptionsList:
+            values.append(element[names[i]])
+            keys.append(element['Occupation'])
+        length = len(descriptionsList)
+        # plt.bar(range(length), values, tick_label=keys)
+        plt.bar(keys, values, color=colors[i])
+        addLabels(values)
+
+        plt.title(names[i])
+
+    # Save graphs to png files
+    fileName = "Charts/" + 'graph' + ".png"
     plt.savefig(fileName)
     plt.show()
 
@@ -182,4 +208,7 @@ sortedOccupations = sortOccupations(occupations)
 descriptionList = getInfoList(sortedOccupations)
 
 # makeGraphs(descriptionList)
-makeOtherGraph(descriptionList)
+#makeOtherGraph(descriptionList, 'sleepDurationMean')
+#makeOtherGraph(descriptionList, 'qualityOfSleepMean')
+#makeOtherGraph(descriptionList, 'stressLevelMean')
+differentGraph(descriptionList)
