@@ -92,14 +92,12 @@ def getOccupationsList(data):
     lawyers = data.loc[data['Occupation'] == 'Lawyer']
     nurses = data.loc[data['Occupation'] == 'Nurse']
     managers = data.loc[data['Occupation'] == 'Manager']
-    salesRepresentatives = data.loc[data['Occupation'] == 'Sales Representative']
     salespersons = data.loc[data['Occupation'] == 'Salesperson']
     scientists = data.loc[data['Occupation'] == 'Scientist']
-    softwareEngineers = data.loc[data['Occupation'] == 'Software Engineer']
     teachers = data.loc[data['Occupation'] == 'Teacher']
 
-    allOccupations = [accountants, doctors, engineers, lawyers, nurses, managers, salesRepresentatives, salespersons,
-                   scientists, softwareEngineers, teachers]
+    allOccupations = [accountants, doctors, engineers, lawyers, nurses, managers, salespersons,
+                   scientists, teachers]
     return allOccupations
 
 def sortOccupations(listOfOccupations):
@@ -175,6 +173,8 @@ occupations = getOccupationsList(dataframe)
 sortedOccupations = sortOccupations(occupations)
 
 descriptionList = getInfoList(sortedOccupations)
+
+print(descriptionList[8]["Occupation"] + str(descriptionList[8]["count"]))
 
 # makeGraphs(descriptionList)
 makeOtherGraph(descriptionList)
