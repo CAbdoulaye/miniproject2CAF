@@ -16,6 +16,8 @@
 # Mini Project 2
 
 import pandas as pd
+import matplotlib.pyplot as plt
+from pathlib import Path
 
 def getInfoList(occupationsList):
     # return list of all occupation dataframe descriptions
@@ -28,9 +30,12 @@ def getInfoList(occupationsList):
 
 def getInfo(occupationName):
     # return dictionary of occupation dataframe description
-
     describe = occupationName.describe()
     describe = describe.round(2)
+
+    #occupation name
+    nameoOfOccupation = occupationName['Occupation'].iloc[0]
+
     # age info
     count = describe['Age'].iloc[0]
     ageMean = describe['Age'].iloc[1]
@@ -54,6 +59,8 @@ def getInfo(occupationName):
     stressLevelMax = describe['Stress Level'].iloc[7]
 
     infoDictionary = {}
+    #infoDictionary['Occupation'] = nameoOfOccupation
+
     infoDictionary['count'] = count
     infoDictionary['ageMean'] = ageMean
     infoDictionary['ageStd'] = ageStd
@@ -101,6 +108,22 @@ def sortOccupations(listOfOccupations):
         listOfOccupations[i] = (listOfOccupations[i])[['Occupation', 'Age', 'Sleep Duration', 'Quality of Sleep', 'Stress Level']]
     return listOfOccupations
 
+def makeGraphs(descriptions):
+    keys = list(descriptions[0].keys)
+    values = list(descriptions[0].values)
+    length = len(descriptions[0])
+
+    plt.bar(length, values, tick_label=keys)
+    # Save graphs to png files
+    fileName = "Charts/ch.png"
+    plt.savefig(fileName)
+    plt.show()
+
+
+try:
+    Path("Charts").mkdir()
+except:
+    pass
 
 # convert cvs file to pd dataframe and stored it to dataframe
 dataframe = pd.read_csv('Sleep_health_and_lifestyle_dataset.csv',  index_col='Person ID')
@@ -112,5 +135,10 @@ occupations = getOccupationsList(dataframe)
 
 sortedOccupations = sortOccupations(occupations)
 
-print(sortedOccupations[6])
+descriptionList = getInfoList(sortedOccupations)
 
+
+for element in descriptionList:
+    print(element)
+
+makeGraphs(descriptionList)
