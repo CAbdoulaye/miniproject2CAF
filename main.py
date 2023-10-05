@@ -126,11 +126,18 @@ def makeOtherGraph(descriptions):
         values.append(element['sleepDurationMean'])
         keys.append(element['Occupation'])
     length = len(descriptions)
-    plt.bar(range(length), values, tick_label=keys)
+    #plt.bar(range(length), values, tick_label=keys)
+    plt.bar(keys, values)
+    addLabels(values)
     # Save graphs to png files
     fileName = "Charts/ch2.png"
     plt.savefig(fileName)
     plt.show()
+
+
+def addLabels(yValues):
+    for i in range(len(yValues)):
+        plt.text(i, yValues[i] + 0.1, yValues[i])
 
 def getListOfMeans(descriptiveList):
     newList = []
@@ -173,8 +180,6 @@ occupations = getOccupationsList(dataframe)
 sortedOccupations = sortOccupations(occupations)
 
 descriptionList = getInfoList(sortedOccupations)
-
-print(descriptionList[8]["Occupation"] + str(descriptionList[8]["count"]))
 
 # makeGraphs(descriptionList)
 makeOtherGraph(descriptionList)
