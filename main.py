@@ -59,7 +59,7 @@ def getInfo(occupationName):
     stressLevelMax = describe['Stress Level'].iloc[7]
 
     infoDictionary = {}
-    #infoDictionary['Occupation'] = nameoOfOccupation
+    infoDictionary['Occupation'] = nameoOfOccupation
 
     infoDictionary['count'] = count
     infoDictionary['ageMean'] = ageMean
@@ -109,16 +109,53 @@ def sortOccupations(listOfOccupations):
     return listOfOccupations
 
 def makeGraphs(descriptions):
-    keys = list(descriptions[0].keys)
-    values = list(descriptions[0].values)
-    length = len(descriptions[0])
-
-    plt.bar(length, values, tick_label=keys)
+    meansList = getListOfMeans(descriptions)
+    keys = list(meansList[0].keys())
+    values = list(meansList[0].values())
+    length = len(meansList[0])
+    print('keys = ')
+    print(keys)
+    plt.bar(range(length), values, tick_label=keys)
     # Save graphs to png files
     fileName = "Charts/ch.png"
     plt.savefig(fileName)
     plt.show()
 
+def makeOtherGraph(descriptions):
+    values = []
+    keys = []
+    for element in descriptions:
+        values.append(element['sleepDurationMean'])
+        keys.append(element['Occupation'])
+    length = len(descriptions)
+    plt.bar(range(length), values, tick_label=keys)
+    # Save graphs to png files
+    fileName = "Charts/ch2.png"
+    plt.savefig(fileName)
+    plt.show()
+
+def getListOfMeans(descriptiveList):
+    newList = []
+    newDict = {}
+    for element in descriptiveList:
+        #newDict['ageMean'] = element['ageMean']
+        newDict['Occupation'] = element['Occupation']
+        newDict['sleepDurationMean'] = element['sleepDurationMean']
+        newDict['qualityOfSleepMean'] = element['qualityOfSleepMean']
+        newDict['stressLevelMean'] = element['stressLevelMean']
+        newList.append(newDict)
+    return newList
+
+def changeOccupationsNames(data):
+
+    print(data.at[4, 'Occupation'])
+    print(data.at[5, 'Occupation'])
+
+    data.at[4, 'Occupation'] = 'Salesman'
+    data.at[5, 'Occupation'] = 'Salesman'
+
+    print(data.at[4, 'Occupation'])
+    print(data.at[5, 'Occupation'])
 
 try:
     Path("Charts").mkdir()
@@ -127,6 +164,8 @@ except:
 
 # convert cvs file to pd dataframe and stored it to dataframe
 dataframe = pd.read_csv('Sleep_health_and_lifestyle_dataset.csv',  index_col='Person ID')
+
+#changeOccupationsNames(dataframe)
 
 # sorted dataframe by occupation
 dataframe = dataframe.sort_values(by=['Occupation'])
@@ -137,8 +176,5 @@ sortedOccupations = sortOccupations(occupations)
 
 descriptionList = getInfoList(sortedOccupations)
 
-
-for element in descriptionList:
-    print(element)
-
-makeGraphs(descriptionList)
+# makeGraphs(descriptionList)
+makeOtherGraph(descriptionList)
